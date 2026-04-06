@@ -9,7 +9,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.controller = ExpertController()
         
-        self.setWindowTitle("Sistema Experto Identificador de Animales")
+        self.setWindowTitle("Sistema Experto de Clasificación Taxonómica")
         self.setMinimumSize(900, 600)
         self.setStyleSheet("""
             QMainWindow {
@@ -152,7 +152,7 @@ class MainWindow(QMainWindow):
 
         # Botones de Acción
         btn_layout = QHBoxLayout()
-        self.btn_identificar = QPushButton("Identificar Especie")
+        self.btn_identificar = QPushButton("Identificar Clase/Familia/Orden")
         self.btn_identificar.clicked.connect(self.identificar)
         
         self.btn_reset = QPushButton("Reiniciar")
@@ -230,12 +230,17 @@ class MainWindow(QMainWindow):
         sel_clase, sel_dieta, sel_carac = self._get_current_selections()
         
         self.text_log.append("--- INICIANDO INFERENCIA ---")
-        especie, log = self.controller.identify_animal(sel_clase, sel_dieta, sel_carac)
+        clasificacion, log = self.controller.identify_animal(sel_clase, sel_dieta, sel_carac)
         
         self.text_log.append(log)
         
-        if especie:
-            self.text_log.append(f"\n<b><font color='green' size='5'>>> Especie identificada: {especie} <<</font></b>")
+        if clasificacion:
+            self.text_log.append(
+                "\n<b><font color='green' size='5'>>> Clasificación identificada <<<</font></b>"
+            )
+            self.text_log.append(f"<b>Clase:</b> {clasificacion.get('clase')}")
+            self.text_log.append(f"<b>Familia:</b> {clasificacion.get('familia')}")
+            self.text_log.append(f"<b>Orden:</b> {clasificacion.get('orden')}")
             
         self.text_log.append("--- FIN ---")
         self.text_log.verticalScrollBar().setValue(self.text_log.verticalScrollBar().maximum())

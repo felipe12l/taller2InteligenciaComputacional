@@ -1,5 +1,5 @@
 from knowledge_base import AnimalExpertEngine, AnimalFact
-from species_data import SPECIES_DATA
+from species_data import SPECIES_DATA, TAXONOMY_BY_SPECIES
 
 class ExpertController:
     def __init__(self):
@@ -58,7 +58,7 @@ class ExpertController:
         return clases_validas, dietas_validas, caracteristicas_validas
 
     def identify_animal(self, clase_sel, dieta_sel, caracteristicas_sel):
-        """Inicia el motor de inferencia con los datos recolectados y retorna los resultados."""
+        """Inicia el motor de inferencia y retorna clasificación: clase, familia y orden."""
         self.engine.reset()
         self.engine.reasoning_log.clear()
         self.engine.identified_species = None
@@ -95,14 +95,55 @@ class ExpertController:
         # Determinar resultado
         especie = self.engine.identified_species
         log = "\n".join(self.engine.reasoning_log)
+        clasificacion = None
 
-        if not especie:
-            # Inferencia incompleta
+        if especie:
+            clase_especie = next((p["clase"] for p in SPECIES_DATA if p["nombre"] == especie), None)
+            taxon = TAXONOMY_BY_SPECIES.get(especie, {})
+            clasificacion = {
+                "clase": clase_especie,
+                "familia": taxon.get("familia"),
+                "orden": taxon.get("orden"),
+            }
+            log += (
+                "\n\nClasificación taxonómica inferida:" 
+                f"\nClase: {clasificacion['clase']}"
+                f"\nFamilia: {clasificacion['familia']}"
+                f"\nOrden: {clasificacion['orden']}"
+            )
+        else:
             posibles = self.get_posibles_especies()
             if len(posibles) > 0:
+                clases = sorted({p["clase"] for p in posibles})
+                familias = sorted(
+                    {
+                        TAXONOMY_BY_SPECIES[p["nombre"]]["familia"]
+                        for p in posibles
+                        if p["nombre"] in TAXONOMY_BY_SPECIES
+                    }
+                )
+                ordenes = sorted(
+                    {
+                        TAXONOMY_BY_SPECIES[p["nombre"]]["orden"]
+                        for p in posibles
+                        if p["nombre"] in TAXONOMY_BY_SPECIES
+                    }
+                )
+                clasificacion = {
+                    "clase": clases[0] if len(clases) == 1 else f"Ambigua: {', '.join(clases)}",
+                    "familia": familias[0] if len(familias) == 1 else f"Ambigua: {', '.join(familias)}",
+                    "orden": ordenes[0] if len(ordenes) == 1 else f"Ambigua: {', '.join(ordenes)}",
+                }
+
                 especies_nombres = ", ".join([p["nombre"] for p in posibles])
-                log += f"\n\nInferencia Incompleta. Especiales posibles ({len(posibles)}):\n{especies_nombres}"
+                log += (
+                    f"\n\nInferencia Incompleta. Especies posibles ({len(posibles)}):\n{especies_nombres}"
+                    "\n\nClasificación taxonómica candidata:"
+                    f"\nClase: {clasificacion['clase']}"
+                    f"\nFamilia: {clasificacion['familia']}"
+                    f"\nOrden: {clasificacion['orden']}"
+                )
             else:
                 log += "\n\nInferencia Fallida. Ningún animal de la base de conocimiento coincide."
         
-        return especie, log
+        return clasificacion, log

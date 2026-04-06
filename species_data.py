@@ -151,6 +151,34 @@ SPECIES_DATA = [
     }
 ]
 
+TAXONOMY_BY_SPECIES = {
+    "Jaguar": {"familia": "Felidae", "orden": "Carnivora"},
+    "Oso de Anteojos": {"familia": "Ursidae", "orden": "Carnivora"},
+    "Chigüiro": {"familia": "Caviidae", "orden": "Rodentia"},
+    "Jirafa": {"familia": "Giraffidae", "orden": "Artiodactyla"},
+    "Cebra": {"familia": "Equidae", "orden": "Perissodactyla"},
+    "Elefante": {"familia": "Elephantidae", "orden": "Proboscidea"},
+    "León": {"familia": "Felidae", "orden": "Carnivora"},
+    "Vaca": {"familia": "Bovidae", "orden": "Artiodactyla"},
+    "Perro": {"familia": "Canidae", "orden": "Carnivora"},
+    "Gato": {"familia": "Felidae", "orden": "Carnivora"},
+    "Murciélago": {"familia": "Vespertilionidae", "orden": "Chiroptera"},
+    "Cóndor": {"familia": "Cathartidae", "orden": "Accipitriformes"},
+    "Águila Arpía": {"familia": "Accipitridae", "orden": "Accipitriformes"},
+    "Guacamaya": {"familia": "Psittacidae", "orden": "Psittaciformes"},
+    "Pingüino": {"familia": "Spheniscidae", "orden": "Sphenisciformes"},
+    "Avestruz": {"familia": "Struthionidae", "orden": "Struthioniformes"},
+    "Gallina": {"familia": "Phasianidae", "orden": "Galliformes"},
+    "Cocodrilo": {"familia": "Crocodylidae", "orden": "Crocodilia"},
+    "Anaconda": {"familia": "Boidae", "orden": "Squamata"},
+    "Iguana": {"familia": "Iguanidae", "orden": "Squamata"},
+    "Tortuga Marina": {"familia": "Cheloniidae", "orden": "Testudines"},
+    "Rana Dorada": {"familia": "Dendrobatidae", "orden": "Anura"},
+    "Sapo Común": {"familia": "Bufonidae", "orden": "Anura"},
+    "Pirarucú": {"familia": "Arapaimidae", "orden": "Osteoglossiformes"},
+    "Tiburón Blanco": {"familia": "Lamnidae", "orden": "Lamniformes"},
+}
+
 # Diccionarios de mapeo para hacerlo amigable en la UI
 CATEGORIAS_UI = {
     "clase": {
